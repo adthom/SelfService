@@ -52,12 +52,12 @@
         "type": "String",
         "defaultValue": "An example runbook that upgrades users to teamsOnly mode"
       },
-      "gitRepoUrl": {
+      "samplePowerShellRunbookLocation": {
         "type": "string",
         "metadata": {
-          "description": "The URL to the GitHub repository to deploy."
+          "description": "The URL to the sample Runbook you want to deploy."
         },
-        "defaultValue": "https://github.com/TheBluLion/SelfService.git"
+        "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/main/"
         },
 
       "branch": {
@@ -70,7 +70,7 @@
       "workspaceName": "[concat(parameters('baseResourceName'),'WS')]",
       "automationAccountName": "[concat(parameters('baseResourceName'),'Acct')]",
       "dataRetention": 7,
-      "_artifactsLocation": "[replace(replace(parameters('gitRepoUrl'),'github.com/','raw.githubusercontent.com/'),'.git','/')]"
+      "_artifactsLocation": "[parameters('samplePowerShellRunbookLocation')]"
     },
     "resources": [
       {
