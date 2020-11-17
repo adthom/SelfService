@@ -31,21 +31,6 @@
           "description": "Pricing tier: perGB2018 or legacy tiers (Free, Standalone, PerNode, Standard or Premium), which are not available to all customers."
         }
       },
-      "dataRetention": {
-        "type": "int",
-        "defaultValue": 30,
-        "minValue": 7,
-        "maxValue": 730,
-        "metadata": {
-          "description": "Number of days to retain data."
-        }
-      },
-      "automationAccountLocation": {
-        "type": "string",
-        "metadata": {
-          "description": "Specifies the location in which to create the Automation account."
-        }
-      },
       "samplePowerShellRunbookName": {
         "type": "String",
         "defaultValue": "UpgradeToTeamsOnly"
@@ -80,7 +65,8 @@
     },
     "variables": {
       "workspaceName": "[parameters('baseResourceName')]",
-      "automationAccountName": "[parameters('baseResourceName')]"
+      "automationAccountName": "[parameters('baseResourceName')]",
+      "dataRetention": "30"
     },
     "resources": [
       {
@@ -92,7 +78,7 @@
           "sku": {
             "name": "[parameters('sku')]"
           },
-          "retentionInDays": "[parameters('dataRetention')]",
+          "retentionInDays": "[variables('dataRetention')]",
           "features": {
             "searchVersion": 1,
             "legacy": 0
@@ -103,7 +89,7 @@
         "type": "Microsoft.Automation/automationAccounts",
         "apiVersion": "2020-01-13-preview",
         "name": "[variables('automationAccountName')]",
-        "location": "[parameters('automationAccountLocation')]",
+        "location": "[parameters('location')]",
         "dependsOn": [
           "[variables('workspaceName')]"
         ],
@@ -117,7 +103,7 @@
             "type": "runbooks",
             "apiVersion": "2018-06-30",
             "name": "[parameters('samplePowerShellRunbookName')]",
-            "location": "[parameters('automationAccountLocation')]",
+            "location": "[parameters('location')]",
             "dependsOn": [
               "[variables('automationAccountName')]"
             ],

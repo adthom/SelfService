@@ -4,9 +4,6 @@
     "parameters": {
       "baseResourceName": {
         "value": "GEN-UNIQUE"
-      },
-      "automationAccountLocation": {
-        "value": "eastus2"
       }
     }
   }
