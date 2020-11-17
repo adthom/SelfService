@@ -57,7 +57,7 @@
         "metadata": {
           "description": "The URL to the sample Runbook you want to deploy."
         },
-        "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/"
+        "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/main/"
         },
 
       "branch": {
@@ -117,7 +117,7 @@
               "logVerbose": "false",
               "description": "[parameters('samplePowerShellRunbookDescription')]",
               "publishContentLink": {
-                "uri": "[uri(variables('_artifactsLocation'), concat(parameters('branch'),'/Scripts/TeamsOnly.ps1'))]",
+                "uri": "[uri(variables('_artifactsLocation'), 'Scripts/TeamsOnly.ps1')]",
                 "version": "1.0.0.0"
               }
             }
