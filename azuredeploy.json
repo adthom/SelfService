@@ -37,7 +37,7 @@
       },
       "samplePowerShellRunbookDescription": {
         "type": "String",
-        "defaultValue": "An example runbook Upgrades users to teamsOnly mode"
+        "defaultValue": "An example runbook that upgrades users to teamsOnly mode"
       },
       "_artifactsLocation": {
         "type": "string",
