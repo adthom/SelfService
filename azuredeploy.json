@@ -51,33 +51,17 @@
           "description": "Specifies the location in which to create the Automation account."
         }
       },
-      "sampleGraphicalRunbookName": {
-        "type": "String",
-        "defaultValue": "AzureAutomationTutorial"
-      },
-      "sampleGraphicalRunbookDescription": {
-        "type": "String",
-        "defaultValue": "An example runbook that gets all the Resource Manager resources by using the Run As account (service principal)."
-      },
       "samplePowerShellRunbookName": {
         "type": "String",
-        "defaultValue": "AzureAutomationTutorialScript"
+        "defaultValue": "UpgradeToTeamsOnly"
       },
       "samplePowerShellRunbookDescription": {
         "type": "String",
-        "defaultValue": "An example runbook that gets all the Resource Manager resources by using the Run As account (service principal)."
-      },
-      "samplePython2RunbookName": {
-        "type": "String",
-        "defaultValue": "AzureAutomationTutorialPython2"
-      },
-      "samplePython2RunbookDescription": {
-        "type": "String",
-        "defaultValue": "An example runbook that gets all the Resource Manager resources by using the Run As account (service principal)."
+        "defaultValue": "An example runbook Upgrades users to teamsOnly mode"
       },
       "_artifactsLocation": {
         "type": "string",
-        "defaultValue": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-automation/",
+        "defaultValue": "https://github.com/TheBluLion/SelfService/main",
         "metadata": {
           "description": "URI to artifacts location"
         }
@@ -124,25 +108,6 @@
           {
             "type": "runbooks",
             "apiVersion": "2018-06-30",
-            "name": "[parameters('sampleGraphicalRunbookName')]",
-            "location": "[parameters('automationAccountLocation')]",
-            "dependsOn": [
-              "[parameters('automationAccountName')]"
-            ],
-            "properties": {
-              "runbookType": "GraphPowerShell",
-              "logProgress": "false",
-              "logVerbose": "false",
-              "description": "[parameters('sampleGraphicalRunbookDescription')]",
-              "publishContentLink": {
-                "uri": "[uri(parameters('_artifactsLocation'), concat('scripts/AzureAutomationTutorial.graphrunbook', parameters('_artifactsLocationSasToken')))]",
-                "version": "1.0.0.0"
-              }
-            }
-          },
-          {
-            "type": "runbooks",
-            "apiVersion": "2018-06-30",
             "name": "[parameters('samplePowerShellRunbookName')]",
             "location": "[parameters('automationAccountLocation')]",
             "dependsOn": [
@@ -154,26 +119,7 @@
               "logVerbose": "false",
               "description": "[parameters('samplePowerShellRunbookDescription')]",
               "publishContentLink": {
-                "uri": "[uri(parameters('_artifactsLocation'), concat('scripts/AzureAutomationTutorial.ps1', parameters('_artifactsLocationSasToken')))]",
-                "version": "1.0.0.0"
-              }
-            }
-          },
-          {
-            "type": "runbooks",
-            "apiVersion": "2018-06-30",
-            "name": "[parameters('samplePython2RunbookName')]",
-            "location": "[parameters('automationAccountLocation')]",
-            "dependsOn": [
-              "[parameters('automationAccountName')]"
-            ],
-            "properties": {
-              "runbookType": "Python2",
-              "logProgress": "false",
-              "logVerbose": "false",
-              "description": "[parameters('samplePython2RunbookDescription')]",
-              "publishContentLink": {
-                "uri": "[uri(parameters('_artifactsLocation'), concat('scripts/AzureAutomationTutorialPython2.py', parameters('_artifactsLocationSasToken')))]",
+                "uri": "[uri(parameters('_artifactsLocation'), concat('scripts/TeamsOnly.ps1', parameters('_artifactsLocationSasToken')))]",
                 "version": "1.0.0.0"
               }
             }

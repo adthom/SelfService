@@ -23,7 +23,7 @@ TODO: Guide users through getting your code up and running on their own system. 
 4.	API references
 
 # Build and Test
-![Deploy to Azure](https://aka.ms/deploytoazurebutton)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FTheBluLion%2FSelfService%2Fmain%2Fazuredeploy.json)
 
 # Contribute
 TODO: Explain how other users and developers can contribute to make your code better.
