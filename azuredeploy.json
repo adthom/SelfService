@@ -57,7 +57,7 @@
         "metadata": {
           "description": "The URL to the sample Runbook you want to deploy."
         },
-        "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/main/"
+        "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/"
         },
 
       "branch": {
