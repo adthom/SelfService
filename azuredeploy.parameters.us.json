@@ -1,15 +1,15 @@
-
+{
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "workspaceName": {
+    "baseResourceName": {
       "value": "GEN-UNIQUE"
     },
-    "automationAccountName": {
+    "m365AdminUpn": {
       "value": "GEN-UNIQUE"
     },
-    "automationAccountLocation": {
-      "value": "usgovvirginia"
+    "m365AdminPassword": {
+      "value": "GEN-UNIQUE"
     }
   }
 }

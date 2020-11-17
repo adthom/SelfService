@@ -31,6 +31,19 @@
           "description": "Pricing tier: perGB2018 or legacy tiers (Free, Standalone, PerNode, Standard or Premium), which are not available to all customers."
         }
       },
+      "m365AdminUpn": {
+        "type": "string",
+        "metadata": {
+          "description": "M365 admin username that has rights to grant Teams policies."
+        }
+      },
+
+      "m365AdminPassword": {
+        "type": "string",
+        "metadata": {
+          "description": "M365 admin password"
+        }
+      },
       "samplePowerShellRunbookName": {
         "type": "String",
         "defaultValue": "UpgradeToTeamsOnly"
@@ -39,34 +52,25 @@
         "type": "String",
         "defaultValue": "An example runbook that upgrades users to teamsOnly mode"
       },
-      "_artifactsLocation": {
-        "type": "string",
-        "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/main/",
-        "metadata": {
-          "description": "URI to artifacts location"
-        }
-      },
       "gitRepoUrl": {
         "type": "string",
         "metadata": {
           "description": "The URL to the GitHub repository to deploy."
         },
         "defaultValue": "https://github.com/TheBluLion/SelfService.git"
-        }
-/*
-      "_artifactsLocationSasToken": {
-        "type": "securestring",
-        "defaultValue": "",
-        "metadata": {
-          "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated"
-        }
+        },
+
+      "branch": {
+        "type": "String",
+        "defaultValue": "main"
       }
-*/
+
     },
     "variables": {
       "workspaceName": "[concat(parameters('baseResourceName'),'WS')]",
       "automationAccountName": "[concat(parameters('baseResourceName'),'Acct')]",
-      "dataRetention": 7
+      "dataRetention": 7,
+      "_artifactsLocation": "[concat(replace(replace(parameters('gitRepoUrl'),'https://github.com/','https://raw.githubusercontent.com/'),'.git','/'),parameters('branch'),'/')]"
     },
     "resources": [
       {
@@ -113,11 +117,21 @@
               "logVerbose": "false",
               "description": "[parameters('samplePowerShellRunbookDescription')]",
               "publishContentLink": {
-                "uri": "[uri(parameters('_artifactsLocation'), concat('Scripts/TeamsOnly.ps1'))]",
+                "uri": "[uri(variables('_artifactsLocation'), concat('Scripts/TeamsOnly.ps1'))]",
                 "version": "1.0.0.0"
               }
             }
-          }
+          },
+          {
+              "name": "Office 365 admin",
+              "type": "credentials",
+              "apiVersion": "2015-10-31",
+              "properties": {
+                "userName": "[parameters('m365AdminUpn')]",
+                "password": "[parameters('m365AdminPassword')]",
+                "description": "Credentials with admin rights to grant Skype for Business and Teams policies."
+              }
+            }
         ]
       },
       {
