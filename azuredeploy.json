@@ -64,9 +64,9 @@
 */
     },
     "variables": {
-      "workspaceName": "[parameters('baseResourceName')]",
-      "automationAccountName": "[parameters('baseResourceName')]",
-      "dataRetention": "30"
+      "workspaceName": "[concat(parameters('baseResourceName'),'WS')]",
+      "automationAccountName": "[concat(parameters('baseResourceName'),'Acct')]",
+      "dataRetention": 30
     },
     "resources": [
       {
