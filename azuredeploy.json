@@ -41,7 +41,7 @@
       },
       "_artifactsLocation": {
         "type": "string",
-        "defaultValue": "https://github.com/TheBluLion/SelfService/main",
+        "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/main/",
         "metadata": {
           "description": "URI to artifacts location"
         }
