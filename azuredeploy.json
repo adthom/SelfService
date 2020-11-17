@@ -127,7 +127,7 @@
               "logVerbose": "false",
               "description": "[parameters('samplePowerShellRunbookDescription')]",
               "publishContentLink": {
-                "uri": "[uri(parameters('_artifactsLocation'), concat('scripts/TeamsOnly.ps1', parameters('_artifactsLocationSasToken')))]",
+                "uri": "[uri(parameters('_artifactsLocation'), concat('scripts/TeamsOnly.ps1'))]",
                 "version": "1.0.0.0"
               }
             }
@@ -144,7 +144,7 @@
           "[variables('automationAccountName')]"
         ],
         "properties": {
-          "resourceId": "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccountName'))]"
+          "resourceId": "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
         }
       }
     ]
