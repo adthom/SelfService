@@ -113,7 +113,7 @@
               "logVerbose": "false",
               "description": "[parameters('samplePowerShellRunbookDescription')]",
               "publishContentLink": {
-                "uri": "[uri(parameters('_artifactsLocation'), concat('scripts/TeamsOnly.ps1'))]",
+                "uri": "[uri(parameters('_artifactsLocation'), concat('Scripts/TeamsOnly.ps1'))]",
                 "version": "1.0.0.0"
               }
             }
