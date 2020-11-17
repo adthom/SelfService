@@ -40,6 +40,7 @@
 
       "m365AdminPassword": {
         "type": "string",
+        "defaultValue": "",
         "metadata": {
           "description": "M365 admin password"
         }
@@ -58,13 +59,7 @@
           "description": "The URL to the sample Runbook you want to deploy."
         },
         "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/main/"
-        },
-
-      "branch": {
-        "type": "String",
-        "defaultValue": "main"
-      }
-
+        }
     },
     "variables": {
       "workspaceName": "[concat(parameters('baseResourceName'),'WS')]",
