@@ -5,12 +5,6 @@
       "baseResourceName": {
         "value": "GEN-UNIQUE"
       },
-      "workspaceName": {
-        "value": "GEN-UNIQUE"
-      },
-      "automationAccountName": {
-        "value": "GEN-UNIQUE"
-      },
       "automationAccountLocation": {
         "value": "eastus2"
       }
