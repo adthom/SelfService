@@ -3,17 +3,15 @@ param(
 )
 
 #this flags sets debug messages to show in the test pane
-$debug=$true
-
-    #Use the request's http header to validate the source of the request
-    $webhookdataheader = convertfrom-json $webhookdata.RequestHeader
+$debug=$false
 
     #the http request body should include any parameters passed to the runbook in json format
     #best practice - a validation secret should also be included in the body to secure the request.
-    $webhookpayload = convertfrom-json $webhookdata.RequestBody
+    $webhookpayload = convertfrom-json $webhookdata
     $upn=$webhookpayload.upn
+    $validationSecret = $webhookpayload.validationsecret
     $MigrateMeetings=$true
-    $Policy="UpgradeToTeams"
+    $Policy= $webhookdata.upgradepolicy
 
     if($debug){
         write-output "debug: webhook payload is $($webhookpayload.upn)"
@@ -24,7 +22,7 @@ $debug=$true
     #$tenantId = Get-AutomationVariable -Name tenantid
 
     #load credentials from automation account
-    $SfBTeamsAdminCredential = Get-AutomationPSCredential -Name "EunnesTenant"
+    $SfBTeamsAdminCredential = Get-AutomationPSCredential -Name "Office 365 admin"
 
     if($debug){
         write-output "debug: SfBAdmin credential retrieved as $($SfbteamsAdmincredential.username)"
@@ -52,6 +50,15 @@ $debug=$true
 
     #clean up session
     remove-pssession $sfbSession
+
+    #if no errors return success
+    if ($error.count -lt 1){
+        write-output "Success"
+    }
+    else{
+        write-output "Failed"
+        write-output $error
+    }
 
 #add logging here
 #add user feedback here -trigger email or IM notification flow.

@@ -118,18 +118,32 @@
             }
           },
           {
-              "name": "Office 365 admin",
-              "type": "credentials",
-              "apiVersion": "2015-10-31",
-              "dependsOn": [
-                "[variables('automationAccountName')]"
-              ],
-              "properties": {
-                "userName": "[parameters('m365AdminUpn')]",
-                "password": "[parameters('m365AdminPassword')]",
-                "description": "Credentials with admin rights to grant Skype for Business and Teams policies."
+            "name": "MicrosoftTeams",
+            "type": "modules",
+            "apiVersion": "2015-10-31",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+              "[variables('automationAccountName')]"
+            ],
+            "properties": {
+              "contentLink": {
+                "uri": "https://devopsgallerystorage.blob.core.windows.net:443/packages/microsoftteams.1.1.6.nupkg"
               }
             }
+          },
+          {
+            "name": "Office 365 admin",
+            "type": "credentials",
+            "apiVersion": "2015-10-31",
+            "dependsOn": [
+              "[variables('automationAccountName')]"
+            ],
+            "properties": {
+              "userName": "[parameters('m365AdminUpn')]",
+              "password": "[parameters('m365AdminPassword')]",
+              "description": "Credentials with admin rights to grant Skype for Business and Teams policies."
+            }
+          }
         ]
       },
       {
