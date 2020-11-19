@@ -95,8 +95,8 @@
       "apiVersion": "2015-10-31",
       "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/', guid(parameters('resourceNamePrefix')))]",
       "dependsOn": [
-        "[resourceId(concat('Microsoft.Automation/automationAccounts/', toLower(parameters('resourceNamePrefix')),'-automation', '/schedules'), 'Weekly')]",
-        "[resourceId(concat('Microsoft.Automation/automationAccounts/', toLower(parameters('resourceNamePrefix')),'-automation', '/runbooks'), 'UpgradeToTeamsOnly')]"
+        "[resourceId('Microsoft.Automation/automationAccounts/schedules', concat(toLower(parameters('resourceNamePrefix')),'-automation'), 'Weekly')]",
+        "[resourceId('Microsoft.Automation/automationAccounts/runbooks', concat(toLower(parameters('resourceNamePrefix')),'-automation'), 'UpgradeToTeamsOnly')]"
       ],
       "properties": {
         "runbook": {
@@ -125,7 +125,7 @@
       "apiVersion": "2015-10-31",
       "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Automation')]",
       "dependsOn": [
-        "[resourceId(concat('Microsoft.Automation/automationAccounts/', toLower(parameters('resourceNamePrefix')),'-automation', '/modules'), 'Az.Accounts')]"
+        "[resourceId('Microsoft.Automation/automationAccounts/modules', concat(toLower(parameters('resourceNamePrefix')),'-automation'), 'Az.Accounts')]"
       ],
       "properties": {
         "contentLink": {
@@ -138,7 +138,7 @@
       "apiVersion": "2015-10-31",
       "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Storage')]",
       "dependsOn": [
-        "[resourceId(concat('Microsoft.Automation/automationAccounts/', toLower(parameters('resourceNamePrefix')),'-automation', '/modules'), 'Az.Accounts')]"
+        "[resourceId('Microsoft.Automation/automationAccounts/modules', concat(toLower(parameters('resourceNamePrefix')),'-automation'), 'Az.Accounts')]"
       ],
       "properties": {
         "contentLink": {
