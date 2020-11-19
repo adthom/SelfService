@@ -93,7 +93,7 @@
     {
       "type": "Microsoft.Automation/automationAccounts/jobSchedules",
       "apiVersion": "2015-10-31",
-      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/', guid(parameters('resourceNamePrefix'),utcNow()))]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/', guid(resourceGroup().id, deployment().name))]",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts/schedules', concat(toLower(parameters('resourceNamePrefix')),'-automation'), 'Weekly')]",
         "[resourceId('Microsoft.Automation/automationAccounts/runbooks', concat(toLower(parameters('resourceNamePrefix')),'-automation'), 'UpgradeToTeamsOnly')]"
