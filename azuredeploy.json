@@ -234,7 +234,7 @@
       ],
       "properties": {
         "isEncrypted": false,
-        "value": "'[toLower(parameters('resourceNamePrefix'))]'",
+        "value": "\"[toLower(parameters('resourceNamePrefix'))]\"",
         "description": "The prefix of the created resources"
       }
     },
