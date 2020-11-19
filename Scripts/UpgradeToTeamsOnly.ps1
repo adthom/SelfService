@@ -1,5 +1,5 @@
 #this flags sets debug messages to show in the test pane
-$debug=$true
+$debug=$false
 
 Import-Module Az.Accounts
 Import-Module Az.Automation
@@ -36,8 +36,16 @@ $BatchLimit = 5000
 $UserIds = [System.Collections.Generic.HashSet[string]]::new()              # HashSet to only allow for unique names
 
 while ($UserIds.Count -lt $BatchLimit) {
-    $CurrentMessage = $PendingQueue.CloudQueue.GetMessage($null, $null, $null)
-    if ($null -eq $CurrentMessage) {
+    $CurrentMessage = $PendingQueue.CloudQueue.GetMessage([TimeSpan]::new(0,1,0), $null, $null)
+    if ($debug) {
+        Write-Output "DEBUG: QueueMessageId: $($CurrentMessage.Id)"
+        Write-Output "DEBUG: QueueMessage: $($CurrentMessage.AsString)"
+        Write-Output "DEBUG: QueueMessageBytes: $($CurrentMessage.AsBytes -join ',')"
+        Write-Output "DEBUG: InsertionTime: $($CurrentMessage.InsertionTime)"
+        Write-Output "DEBUG: ExpirationTime: $($CurrentMessage.ExpirationTime)"
+        Write-Output "DEBUG: DequeueCount: $($CurrentMessage.DequeueCount)"
+    }
+    if ($null -eq $CurrentMessage.AsString) {
         break
     }
     $UserIds.Add($CurrentMessage.AsString.ToLower()) | Out-Null
@@ -111,7 +119,7 @@ if ($null -ne $BatchId) {
         Name = "WaitForBatch"
         ResourceGroupName = $RGName
         Parameters = @{
-            BatchId = $BatchId
+            BatchId = $BatchId.ToString()
         }
     }
     if ($debug) {
