@@ -229,7 +229,7 @@
       }
     },
     {
-      "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
+      "type": "Microsoft.Storage/storageAccounts/queueServices",
       "apiVersion": "2020-08-01-preview",
       "name": "[concat(concat(parameters('resourceNamePrefix'),'storage'), '/default')]",
       "dependsOn": [
