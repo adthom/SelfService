@@ -148,8 +148,8 @@
       "properties": {
         "contentLink": {}
       }
-    }
-      {
+    },
+    {
       "type": "Microsoft.Automation/automationAccounts/runbooks",
       "apiVersion": "2018-06-30",
       "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/UpgradeToTeamsOnly')]",
