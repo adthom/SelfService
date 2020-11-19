@@ -221,7 +221,7 @@
       ],
       "properties": {
         "isEncrypted": false,
-        "value": "\"[resourceGroup().name]\"",
+        "value": "[resourceGroup().name]",
         "description": "The name of the Azure Resource Group"
       }
     },
@@ -234,7 +234,7 @@
       ],
       "properties": {
         "isEncrypted": false,
-        "value": "\"[toLower(parameters('resourceNamePrefix'))]\"",
+        "value": "[toLower(parameters('resourceNamePrefix'))]",
         "description": "The prefix of the created resources"
       }
     },
