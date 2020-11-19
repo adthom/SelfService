@@ -28,7 +28,8 @@ catch {
 }
 #Get configured storage account
 $RGName = Get-AutomationVariable -Name ResourceGroupName
-$StorageAccount = Get-AzStorageAccount -ResourceGroupName $RGName -Name "${RGName}storage"
+$Prefix = Get-AutomationVariable -Name ResourcePrefix
+$StorageAccount = Get-AzStorageAccount -ResourceGroupName $RGName -Name "${Prefix}storage"
 $PendingQueue = Get-AzStorageQueue -Name "teamsonlypending" -Context $StorageAccount.Context
 
 $BatchLimit = 5000
@@ -106,7 +107,7 @@ if ($BatchParams['Identity'].Count -gt 0) {
 
 if ($null -ne $BatchId) {
     $RunbookParams = @{
-        AutomationAccountName = "${RGName}-automation"
+        AutomationAccountName = "${Prefix}-automation"
         Name = "WaitForBatch"
         ResourceGroupName = $RGName
         Parameters = @{

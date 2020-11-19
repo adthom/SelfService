@@ -11,6 +11,7 @@ Import-Module Az.Automation
 Import-Module Az.Storage
 
 $RGName = Get-AutomationVariable -Name ResourceGroupName
+$Prefix = Get-AutomationVariable -Name ResourcePrefix
 $connectionName = "AzureRunAsConnection"
 try
 {
@@ -52,7 +53,7 @@ if ($null -ne $BatchResult) {
 
 if ($null -eq $BatchResult -or $BatchResult.OverallStatus -eq "Completed") {
     #Get configured storage account
-    $StorageAccount = Get-AzStorageAccount -ResourceGroupName $RGName -Name "${RGName}storage"
+    $StorageAccount = Get-AzStorageAccount -ResourceGroupName $RGName -Name "${Prefix}storage"
     $CompletedQueue = Get-AzStorageQueue -Name "teamsonlycompleted" -Context $StorageAccount.Context
 
     #add logging here
@@ -78,7 +79,7 @@ if ($null -eq $BatchResult -or $BatchResult.OverallStatus -eq "Completed") {
 
     # start another cycle
     $RunbookParams = @{
-        AutomationAccountName = "${RGName}-automation"
+        AutomationAccountName = "${Prefix}-automation"
         Name = "WaitForBatch"
         ResourceGroupName = $RGName
         Parameters = @{

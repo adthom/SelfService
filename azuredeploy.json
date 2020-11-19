@@ -211,8 +211,32 @@
       ],
       "properties": {
         "isEncrypted": false,
-        "value": "[parameters('resourceNamePrefix')]",
+        "value": "[resourceGroup().name]",
         "description": "The name of the Azure Resource Group"
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/variables",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/ResourcePrefix')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "isEncrypted": false,
+        "value": "[parameters('resourceNamePrefix')]",
+        "description": "The prefix of the created resources"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'storage'), '/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('resourceNamePrefix'),'storage'))]"
+      ],
+      "properties": {
+        "metadata": {}
       }
     },
     {
