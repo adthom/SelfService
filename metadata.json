@@ -3,8 +3,8 @@
     "type": "QuickStart",
     "itemDisplayName": "Self Service App Template",
     "description": "This template creates an Azure Automation account and runbook. This Runbook provides sample code for user initiated self service upgrades to TeamsOnly mode.",
-    "summary": "Create an Azure Automation account and create a new Azure Monitor Log Analytics workspace if it doesn't exist, and then link them together. Add the UpgradetoTeamOnly Runbook",
-    "githubUsername": "TheBluLion",
-    "docOwner": "TheBluLion",
-    "dateUpdated": "2020-11-17"
+    "summary": "Create the framework for self-service Teams Policy Updates",
+    "githubUsername": "adthom",
+    "docOwner": "adthom",
+    "dateUpdated": "2020-11-18"
   }

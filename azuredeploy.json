@@ -1,163 +1,243 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "baseResourceName": {
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceNamePrefix": {
       "type": "string",
       "minLength": 1,
       "metadata": {
-        "description": "The base name to use for the resources that will be provisioned."
+        "description": "The prefix to be used for all resources that will be provisioned."
       }
     },
-      "location": {
+    "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]",
       "metadata": {
         "description": "Location for all resources."
       }
     },
-      "sku": {
-        "type": "string",
-        "defaultValue": "Free",
-        "allowedValues": [
-          "pergb2018",
-          "Free",
-          "Standalone",
-          "PerNode",
-          "Standard",
-          "Premium"
-        ],
-        "metadata": {
-          "description": "Pricing tier: perGB2018 or legacy tiers (Free, Standalone, PerNode, Standard or Premium), which are not available to all customers."
-        }
-      },
-      "m365AdminUpn": {
-        "type": "string",
-        "metadata": {
-          "description": "M365 admin username that has rights to grant Teams policies."
-        }
-      },
-
-      "m365AdminPassword": {
-        "type": "string",
-        "defaultValue": "",
-        "metadata": {
-          "description": "M365 admin password"
-        }
-      },
-      "samplePowerShellRunbookName": {
-        "type": "String",
-        "defaultValue": "UpgradeToTeamsOnly"
-      },
-      "samplePowerShellRunbookDescription": {
-        "type": "String",
-        "defaultValue": "An example runbook that upgrades users to teamsOnly mode"
-      },
-      "samplePowerShellRunbookLocation": {
-        "type": "string",
-        "metadata": {
-          "description": "The URL to the sample Runbook you want to deploy."
-        },
-        "defaultValue": "https://raw.githubusercontent.com/TheBluLion/SelfService/main/"
-        }
+    "M365AdminUPN": {
+      "type": "string",
+      "metadata": {
+        "description": "M365 admin username that has rights to grant Teams policies."
+      }
     },
-    "variables": {
-      "workspaceName": "[concat(parameters('baseResourceName'),'WS')]",
-      "automationAccountName": "[concat(parameters('baseResourceName'),'Acct')]",
-      "dataRetention": 7,
-      "_artifactsLocation": "[parameters('samplePowerShellRunbookLocation')]"
-    },
-    "resources": [
-      {
-        "type": "Microsoft.OperationalInsights/workspaces",
-        "apiVersion": "2020-08-01",
-        "name": "[variables('workspaceName')]",
-        "location": "[parameters('location')]",
-        "properties": {
-          "sku": {
-            "name": "[parameters('sku')]"
-          },
-          "retentionInDays": "[variables('dataRetention')]",
-          "features": {
-            "searchVersion": 1,
-            "legacy": 0
-          }
-        }
-      },
-      {
-        "type": "Microsoft.Automation/automationAccounts",
-        "apiVersion": "2020-01-13-preview",
-        "name": "[variables('automationAccountName')]",
-        "location": "[parameters('location')]",
-        "dependsOn": [
-          "[variables('workspaceName')]"
-        ],
-        "properties": {
-          "sku": {
-            "name": "Basic"
-          }
-        },
-        "resources": [
-          {
-            "type": "runbooks",
-            "apiVersion": "2018-06-30",
-            "name": "[parameters('samplePowerShellRunbookName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-              "[variables('automationAccountName')]"
-            ],
-            "properties": {
-              "runbookType": "PowerShell",
-              "logProgress": "false",
-              "logVerbose": "false",
-              "description": "[parameters('samplePowerShellRunbookDescription')]",
-              "publishContentLink": {
-                "uri": "[uri(variables('_artifactsLocation'), 'Scripts/TeamsOnly.ps1')]",
-                "version": "1.0.0.0"
-              }
-            }
-          },
-          {
-            "name": "MicrosoftTeams",
-            "type": "modules",
-            "apiVersion": "2015-10-31",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-              "[variables('automationAccountName')]"
-            ],
-            "properties": {
-              "contentLink": {
-                "uri": "https://devopsgallerystorage.blob.core.windows.net:443/packages/microsoftteams.1.1.6.nupkg"
-              }
-            }
-          },
-          {
-            "name": "Office 365 admin",
-            "type": "credentials",
-            "apiVersion": "2015-10-31",
-            "dependsOn": [
-              "[variables('automationAccountName')]"
-            ],
-            "properties": {
-              "userName": "[parameters('m365AdminUpn')]",
-              "password": "[parameters('m365AdminPassword')]",
-              "description": "Credentials with admin rights to grant Skype for Business and Teams policies."
-            }
-          }
-        ]
-      },
-      {
-        "type": "Microsoft.OperationalInsights/workspaces/linkedServices",
-        "apiVersion": "2020-08-01",
-        "name": "[concat(variables('workspaceName'), '/' , 'Automation')]",
-        "location": "[parameters('location')]",
-        "dependsOn": [
-          "[variables('workspaceName')]",
-          "[variables('automationAccountName')]"
-        ],
-        "properties": {
-          "resourceId": "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+    "M365AdminPassword": {
+      "type": "SecureString",
+      "metadata": {
+        "description": "The password for the account noted in M365AdminUPN."
+      }
+    }
+  },
+  "variables": {
+    "_artifactsLocation": "https://raw.githubusercontent.com/adthom/SelfService/main/"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Automation/automationAccounts",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(parameters('resourceNamePrefix'),'-automation')]",
+      "location": "eastus",
+      "properties": {
+        "sku": {
+          "name": "Basic"
         }
       }
-    ]
-  }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[concat(parameters('resourceNamePrefix'),'storage')]",
+      "location": "eastus",
+      "sku": {
+        "name": "Standard_GRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "minimumTlsVersion": "TLS1_2",
+        "allowBlobPublicAccess": true,
+        "networkAcls": {
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "file": {
+              "keyType": "Account",
+              "enabled": true
+            },
+            "blob": {
+              "keyType": "Account",
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Hot"
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/credentials",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/O365Admin')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "userName": "[parameters('M365AdminUPN')]",
+        "password": "[parameters('M365AdminPassword')]"
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/f1861e65-6030-4ec5-ba81-947e2bc1df6f')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "runbook": {
+          "name": "UpgradeToTeamsOnly"
+        },
+        "schedule": {
+          "name": "Weekly"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/modules",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/Az.Accounts')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "contentLink": {}
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/modules",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/Az.Automation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "contentLink": {}
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/modules",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/Az.Storage')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "contentLink": {}
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/modules",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/MicrosoftTeams')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "contentLink": {}
+      }
+    }
+      {
+      "type": "Microsoft.Automation/automationAccounts/runbooks",
+      "apiVersion": "2018-06-30",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/UpgradeToTeamsOnly')]",
+      "location": "eastus",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "runbookType": "PowerShell",
+        "logVerbose": false,
+        "logProgress": false,
+        "logActivityTrace": 0,
+        "publishContentLink": {
+          "uri": "[uri(variables('_artifactsLocation'), 'Scripts/UpgradeToTeamsOnly.ps1')]",
+          "version": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/runbooks",
+      "apiVersion": "2018-06-30",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/WaitForBatch')]",
+      "location": "eastus",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "runbookType": "PowerShell",
+        "logVerbose": false,
+        "logProgress": false,
+        "logActivityTrace": 0,
+        "publishContentLink": {
+          "uri": "[uri(variables('_artifactsLocation'), 'Scripts/WaitForBatch.ps1')]",
+          "version": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/schedules",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/Weekly')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "startTime": "2020-11-19T20:00:00-05:00",
+        "expiryTime": "9999-12-31T18:59:00-05:00",
+        "interval": 1,
+        "frequency": "Week",
+        "timeZone": "America/New_York"
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/variables",
+      "apiVersion": "2015-10-31",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'-automation'), '/ResourceGroupName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(parameters('resourceNamePrefix'),'-automation'))]"
+      ],
+      "properties": {
+        "isEncrypted": false,
+        "value": "[parameters('resourceNamePrefix')]",
+        "description": "The name of the Azure Resource Group"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'storage'), '/default/teamsonlycompleted')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/queueServices', concat(parameters('resourceNamePrefix'),'storage'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('resourceNamePrefix'),'storage'))]"
+      ],
+      "properties": {
+        "metadata": {}
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[concat(concat(parameters('resourceNamePrefix'),'storage'), '/default/teamsonlypending')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/queueServices', concat(parameters('resourceNamePrefix'),'storage'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('resourceNamePrefix'),'storage'))]"
+      ],
+      "properties": {
+        "metadata": {}
+      }
+    }
+  ]
+}

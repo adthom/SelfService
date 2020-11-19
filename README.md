@@ -25,7 +25,7 @@ TODO: Guide users through getting your code up and running on their own system. 
 # Build and Test
 
 ## Install the Runbook
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FTheBluLion%2FSelfService%2Fmain%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fadthom%2FSelfService%2Fmain%2Fazuredeploy.json)
 
 ## Import the Flow
 Needs instructions to install flow package
