@@ -81,7 +81,7 @@
     {
       "type": "Microsoft.Automation/automationAccounts/credentials",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/O365Admin')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/O365Admin')]",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
@@ -93,7 +93,7 @@
     {
       "type": "Microsoft.Automation/automationAccounts/jobSchedules",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/f1861e65-6030-4ec5-ba81-947e2bc1df6f')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/', newGuid())]",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
@@ -109,51 +109,59 @@
     {
       "type": "Microsoft.Automation/automationAccounts/modules",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/Az.Accounts')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Accounts')]",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
       "properties": {
-        "contentLink": {}
+        "contentLink": {
+          "uri": "https://devopsgallerystorage.blob.core.windows.net:443/packages/az.accounts.2.2.1.nupkg"
+        }
       }
     },
     {
       "type": "Microsoft.Automation/automationAccounts/modules",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/Az.Automation')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Automation')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Accounts'))]"
       ],
       "properties": {
-        "contentLink": {}
+        "contentLink": {
+          "uri": "https://devopsgallerystorage.blob.core.windows.net:443/packages/az.automation.1.4.0.nupkg"
+        }
       }
     },
     {
       "type": "Microsoft.Automation/automationAccounts/modules",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/Az.Storage')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Storage')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Accounts'))]"
       ],
       "properties": {
-        "contentLink": {}
+        "contentLink": {
+          "uri": "https://devopsgallerystorage.blob.core.windows.net:443/packages/az.storage.3.0.0.nupkg"
+        }
       }
     },
     {
       "type": "Microsoft.Automation/automationAccounts/modules",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/MicrosoftTeams')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/MicrosoftTeams')]",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
       "properties": {
-        "contentLink": {}
+        "contentLink": {
+          "uri": "https://devopsgallerystorage.blob.core.windows.net:443/packages/microsoftteams.1.1.6.nupkg"
+        }
       }
     },
     {
       "type": "Microsoft.Automation/automationAccounts/runbooks",
       "apiVersion": "2018-06-30",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/UpgradeToTeamsOnly')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/UpgradeToTeamsOnly')]",
       "location": "eastus",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
@@ -172,7 +180,7 @@
     {
       "type": "Microsoft.Automation/automationAccounts/runbooks",
       "apiVersion": "2018-06-30",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/WaitForBatch')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/WaitForBatch')]",
       "location": "eastus",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
@@ -191,7 +199,7 @@
     {
       "type": "Microsoft.Automation/automationAccounts/schedules",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/Weekly')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Weekly')]",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
@@ -206,33 +214,33 @@
     {
       "type": "Microsoft.Automation/automationAccounts/variables",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/ResourceGroupName')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/ResourceGroupName')]",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
       "properties": {
         "isEncrypted": false,
-        "value": "[resourceGroup().name]",
+        "value": "\"[resourceGroup().name]\"",
         "description": "The name of the Azure Resource Group"
       }
     },
     {
       "type": "Microsoft.Automation/automationAccounts/variables",
       "apiVersion": "2015-10-31",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'-automation'), '/ResourcePrefix')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/ResourcePrefix')]",
       "dependsOn": [
         "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
       "properties": {
         "isEncrypted": false,
-        "value": "[toLower(parameters('resourceNamePrefix'))]",
+        "value": "\"[toLower(parameters('resourceNamePrefix'))]\"",
         "description": "The prefix of the created resources"
       }
     },
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices",
       "apiVersion": "2020-08-01-preview",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'storage'), '/default')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'storage', '/default')]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', concat(toLower(parameters('resourceNamePrefix')),'storage'))]"
       ],
@@ -243,7 +251,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
       "apiVersion": "2020-08-01-preview",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'storage'), '/default/teamsonlycompleted')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'storage', '/default/teamsonlycompleted')]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts/queueServices', concat(toLower(parameters('resourceNamePrefix')),'storage'), 'default')]",
         "[resourceId('Microsoft.Storage/storageAccounts', concat(toLower(parameters('resourceNamePrefix')),'storage'))]"
@@ -255,7 +263,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
       "apiVersion": "2020-08-01-preview",
-      "name": "[concat(concat(toLower(parameters('resourceNamePrefix')),'storage'), '/default/teamsonlypending')]",
+      "name": "[concat(toLower(parameters('resourceNamePrefix')),'storage', '/default/teamsonlypending')]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts/queueServices', concat(toLower(parameters('resourceNamePrefix')),'storage'), 'default')]",
         "[resourceId('Microsoft.Storage/storageAccounts', concat(toLower(parameters('resourceNamePrefix')),'storage'))]"
