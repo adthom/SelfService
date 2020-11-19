@@ -24,24 +24,26 @@ TODO: Guide users through getting your code up and running on their own system. 
 
 # Build and Test
 
-##Install the Runbook
+## Install the Runbook
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FTheBluLion%2FSelfService%2Fmain%2Fazuredeploy.json)
 
-##Import the Flow
+## Import the Flow
 Needs instructions to install flow package
 1. SelfServiceFlow.zip
 
-##Import the PowerApp
+## Import the PowerApp
 Needs instructions to import msapp
 1. Navigate to PowerApps Studio (https://us.create.powerapps.com/studio/) (Commercial)
 (For GCC use https://gov.create.powerapps.us/studio/)
-1. Click on Open 
+1. Click on Open
 1. Select Browse Files and select RequestMigration.app
 1. Click on File, and save the imported app.
 1. When prompted, click Share
 1. Uncheck “Send an email invitation to new users” and share the app with the Everyone group.
 
-##
+## Create the Teams App Package
+
+## Pin to users and Teams channels
 
 # Contribute
 TODO: Explain how other users and developers can contribute to make your code better.

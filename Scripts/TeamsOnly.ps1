@@ -1,5 +1,5 @@
 param(
-    [object]$webhookdata
+    [string]$webhookdata
 )
 
 #this flags sets debug messages to show in the test pane
@@ -9,7 +9,6 @@ $debug=$false
     #best practice - a validation secret should also be included in the body to secure the request.
     $webhookpayload = convertfrom-json $webhookdata
     $upn=$webhookpayload.upn
-    $validationSecret = $webhookpayload.validationsecret
     $MigrateMeetings=$true
     $Policy= $webhookdata.upgradepolicy
 
@@ -46,7 +45,7 @@ $debug=$false
     #New-CsBatchPolicyAssignmentOperation -PolicyType TeamsUpgradePolicy -PolicyName $null -Identity $upn -OperationName "Batch assign null"
 
     #singleton for single runs - this uses Sfb session. Uncomment the line below to enable.
-    #grant-csteamsupgradepolicy -PolicyName $Policy -MigrateMeetingsToTeams $MigrateMeetings -Identity $upn
+    grant-csteamsupgradepolicy -PolicyName $Policy -MigrateMeetingsToTeams $MigrateMeetings -Identity $upn
 
     #clean up session
     remove-pssession $sfbSession
