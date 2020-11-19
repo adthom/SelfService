@@ -124,7 +124,7 @@
       "apiVersion": "2015-10-31",
       "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Automation')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Accounts'))]"
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
       "properties": {
         "contentLink": {
@@ -137,7 +137,7 @@
       "apiVersion": "2015-10-31",
       "name": "[concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Storage')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation', '/Az.Accounts'))]"
+        "[resourceId('Microsoft.Automation/automationAccounts', concat(toLower(parameters('resourceNamePrefix')),'-automation'))]"
       ],
       "properties": {
         "contentLink": {
